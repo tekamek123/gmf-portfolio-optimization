@@ -5,6 +5,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from src.data_processing import ProjectConfig, DataIngestion
 from src.models import ARIMAModel, LSTMForecaster
+from src.explainability import ModelExplainer
+import matplotlib.pyplot as plt
 import os
 
 # Page Config
@@ -27,6 +29,7 @@ df = pd.read_csv(config.PROCESSED_DATA_PATH, index_col=0, parse_dates=True)
 # Sidebar - Asset Selection
 st.sidebar.header("Portfolio Settings")
 selected_ticker = st.sidebar.selectbox("Select Asset for Deep Dive", config.TICKERS)
+model_type = st.sidebar.radio("Forecasting Algorithm", ["ARIMA (Statistical)", "LSTM (Deep Learning)"])
 
 # Main Grid - Overview
 col1, col2, col3 = st.columns(3)
@@ -38,34 +41,57 @@ for i, ticker in enumerate(config.TICKERS):
 
 # Main Chart - Historical Prices
 st.write(f"### Historical Performance: {selected_ticker}")
-fig = px.line(df, y=selected_ticker, title=f"{selected_ticker} Price History")
-st.plotly_chart(fig, use_container_width=True)
+fig = px.line(df, y=selected_ticker, title=f"{selected_ticker} Price History", color_discrete_sequence=['#1f77b4'])
+st.plotly_chart(fig, width='stretch')
 
 # Forecasting Section
 st.write("---")
-st.write("### 🔮 Predictive Analytics")
+st.write(f"### 🔮 {model_type} Predictive Analytics")
 forecast_steps = st.slider("Forecast Horizon (Days)", 7, 60, 30)
 
 if st.button("Generate Forecast"):
     with st.spinner(f"Training models for {selected_ticker}..."):
-        # Classical ARIMA
-        arima = ARIMAModel(selected_ticker)
-        arima.train(df[selected_ticker])
-        arima_pred = arima.predict(forecast_steps)
-        
-        # Display results (simplified for now)
-        st.success("Forecast generated successfully!")
-        
-        # Plot forecast
         last_date = df.index[-1]
         forecast_dates = pd.date_range(start=last_date + pd.Timedelta(days=1), periods=forecast_steps)
         
-        forecast_df = pd.DataFrame({
-            'Date': forecast_dates,
-            'ARIMA Forecast': arima_pred
-        }).set_index('Date')
-        
+        if model_type == "ARIMA (Statistical)":
+            arima = ARIMAModel(selected_ticker)
+            arima.train(df[selected_ticker])
+            preds = arima.predict(forecast_steps)
+            label = "ARIMA Forecast"
+            
+        else:  # LSTM
+            lstm = LSTMForecaster(selected_ticker)
+            # Use small epochs for quick demo speed in dashboard
+            lstm.train(df[selected_ticker], epochs=5)
+            
+            # Prepare the last window for the recursive forecast
+            scaled_input = lstm.scaler.transform(df[selected_ticker].values[-60:].reshape(-1, 1))
+            preds = lstm.predict(scaled_input, steps=forecast_steps)
+            label = "LSTM Forecast"
+
+            # SHAP Explainability Sub-section
+            st.write("#### 🛡️ Model Transparency (SHAP)")
+            # Use a sample of the data as background for speed
+            sample_data = lstm.scaler.transform(df[selected_ticker].values[-200:].reshape(-1, 1))
+            X_background, _ = lstm._prepare_sequences(sample_data)
+            X_background = np.reshape(X_background, (X_background.shape[0], X_background.shape[1], 1))
+            X_test = X_background[-1:] # Explain the most recent pattern
+            
+            explainer = ModelExplainer(lstm.model, X_background)
+            shap_vals = explainer.explain(X_test)
+            
+            col_a, col_b = st.columns(2)
+            with col_a:
+                st.pyplot(explainer.plot_importance(shap_vals, [f"{selected_ticker} Lag"]))
+            with col_b:
+                st.pyplot(explainer.plot_time_importance(shap_vals, 60))
+
+        # Combined Plot
+        forecast_df = pd.DataFrame({'Date': forecast_dates, label: preds}).set_index('Date')
         fig_forecast = go.Figure()
         fig_forecast.add_trace(go.Scatter(x=df.index[-100:], y=df[selected_ticker].iloc[-100:], name="Historical"))
-        fig_forecast.add_trace(go.Scatter(x=forecast_df.index, y=forecast_df['ARIMA Forecast'], name="ARIMA Forecast", line=dict(dash='dash')))
-        st.plotly_chart(fig_forecast, use_container_width=True)
+        fig_forecast.add_trace(go.Scatter(x=forecast_df.index, y=forecast_df[label], name=label, line=dict(dash='dash', color='orange')))
+        st.plotly_chart(fig_forecast, width='stretch')
+        
+        st.success(f"{label} generated and explained successfully!")
