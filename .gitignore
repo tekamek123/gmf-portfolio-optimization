@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Data
+data/
+*.csv
+*.xlsx
+
+# Testing/Cache
+.pytest_cache/
+test_output.txt
+test_output_utf8.txt
+
+# IDE
+.vscode/
+.idea/
