@@ -71,6 +71,6 @@ streamlit run dashboard/app.py
 - **Advanced RL:** Implementing Reinforcement Learning for automated trade execution.
 
 ## 👤 Author
-**[Your Name]**
-- [LinkedIn](your-link)
-- [GitHub](your-link)
+**Tekalegn Mekonen**
+- [LinkedIn](www.linkedin.com/in/tekalegn-mekonen-456b662a7)
+- [GitHub](https://github.com/tekamek123)
