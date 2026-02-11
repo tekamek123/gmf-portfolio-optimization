@@ -95,3 +95,52 @@ if st.button("Generate Forecast"):
         st.plotly_chart(fig_forecast, width='stretch')
         
         st.success(f"{label} generated and explained successfully!")
+
+# Portfolio Optimization Section
+st.write("---")
+st.write("### ⚖️ Portfolio Optimization (Modern Portfolio Theory)")
+st.write("Calculate the optimal asset allocation based on historical risk and returns.")
+
+from src.optimization import PortfolioOptimizer
+
+if st.button("Optimize Portfolio Weights"):
+    with st.spinner("Calculating Efficient Frontier..."):
+        optimizer = PortfolioOptimizer(df)
+        weights = optimizer.optimize_performance()
+        ret, vol, sharpe = optimizer.get_performance(weights)
+        
+        col_w1, col_w2 = st.columns([1, 1])
+        
+        with col_w1:
+            st.write("#### 🎯 Optimal Weights (Max Sharpe)")
+            weight_df = pd.DataFrame(list(weights.items()), columns=['Asset', 'Weight'])
+            fig_weights = px.pie(weight_df, values='Weight', names='Asset', hole=0.4,
+                               title="Recommended Allocation",
+                               color_discrete_sequence=px.colors.qualitative.Pastel)
+            st.plotly_chart(fig_weights, width='stretch')
+            
+        with col_w2:
+            st.write("#### 📈 Expected Performance")
+            st.metric("Expected Annual Return", f"{ret*100:.2f}%")
+            st.metric("Annual Volatility (Risk)", f"{vol*100:.2f}%")
+            st.metric("Sharpe Ratio", f"{sharpe:.2f}")
+            
+            st.info("💡 The Sharpe Ratio measures the performance of an investment compared to a risk-free asset, after adjusting for its risk.")
+
+        # Comparison with Equal Weight Portfolio
+        st.write("#### ⚖️ Comparison: Strategy vs. Equal Weight")
+        equal_weights = {t: 1.0/len(config.TICKERS) for t in config.TICKERS}
+        e_ret, e_vol, e_sharpe = optimizer.get_performance(equal_weights)
+        
+        comparison_data = {
+            'Metric': ['Annual Return', 'Volatility', 'Sharpe Ratio'],
+            'Optimal (Max Sharpe)': [ret, vol, sharpe],
+            'Equal Weight (Benchmark)': [e_ret, e_vol, e_sharpe]
+        }
+        comp_df = pd.DataFrame(comparison_data)
+        
+        fig_comp = go.Figure()
+        fig_comp.add_trace(go.Bar(x=comp_df['Metric'], y=comp_df['Optimal (Max Sharpe)'], name='Optimal Portfolio'))
+        fig_comp.add_trace(go.Bar(x=comp_df['Metric'], y=comp_df['Equal Weight (Benchmark)'], name='Equal Weight'))
+        fig_comp.update_layout(title="Optimal vs. Equal Weight Comparison", barmode='group')
+        st.plotly_chart(fig_comp, width='stretch')
