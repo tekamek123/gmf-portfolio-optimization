@@ -1,0 +1,143 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            @page {
+                size: A4;
+                margin: 2cm;
+            }
+            body {
+                font-family: 'Helvetica', 'Arial', sans-serif;
+                line-height: 1.6;
+                color: #2c3e50;
+                padding: 20px;
+            }
+            h1 {
+                color: #1a5276;
+                text-align: center;
+                border-bottom: 2px solid #1a5276;
+                padding-bottom: 10px;
+                margin-top: 0;
+            }
+            h2 {
+                color: #2471a3;
+                border-bottom: 1px solid #d4e6f1;
+                padding-bottom: 5px;
+                margin-top: 30px;
+            }
+            h3 {
+                color: #2980b9;
+                margin-top: 20px;
+            }
+            img {
+                display: block;
+                margin: 20px auto;
+                max-width: 100%;
+                border: 1px solid #dee2e6;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            em {
+                display: block;
+                text-align: center;
+                font-size: 0.9em;
+                color: #7f8c8d;
+                margin-top: -15px;
+                margin-bottom: 20px;
+            }
+            code {
+                background-color: #f4f6f7;
+                padding: 2px 5px;
+                border-radius: 3px;
+                font-family: 'Courier New', monospace;
+            }
+            pre {
+                background-color: #f4f6f7;
+                padding: 15px;
+                border-left: 4px solid #3498db;
+                overflow-x: auto;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            th, td {
+                border: 1px solid #d5dbdb;
+                padding: 12px;
+                text-align: left;
+            }
+            th {
+                background-color: #ebf5fb;
+            }
+            .footer {
+                text-align: center;
+                font-size: 0.8em;
+                color: #95a5a6;
+                margin-top: 50px;
+                border-top: 1px solid #eee;
+                padding-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header" style="text-align: right; color: #7f8c8d; font-size: 0.9em; margin-bottom: 20px;">
+            February 11, 2026
+        </div>
+        <h1>🏦 Transforming Financial Forecasting into a Production-Grade Portfolio Optimizer</h1>
+<h2>🌟 Executive Summary</h2>
+<p>In the modern financial landscape, the ability to not just predict market trends but to translate those predictions into actionable, optimized strategies is what sets apart professional-grade systems. This project documents the complete transformation of a baseline forecasting script into a robust, "GMF-ready" Portfolio Management Optimization tool.</p>
+<p><img alt="Dashboard Overview" src="C:/Users/tekam/.gemini/antigravity/brain/c4692355-0c0d-4c50-98a4-fb3ab3e9e849/screenshots/TSL-Metric-Card.png" />
+<em>Figure 1: Executive Dashboard showing real-time price metrics and historical trends.</em></p>
+<p>By combining <strong>Deep Learning (LSTM)</strong>, <strong>Classical Statistics (ARIMA)</strong>, and <strong>Modern Portfolio Theory (MPT)</strong>, this system provides a dual-layer approach to wealth management: high-accuracy forecasting and risk-aware capital allocation.</p>
+<hr />
+<h2>🏗️ Phase 1: Engineering Excellence &amp; Reliability</h2>
+<p>A script that "just runs" is not production code. To meet finance-sector standards, the codebase underwent a total architectural overhaul:</p>
+<ul>
+<li><strong>Modular Design:</strong> Transitioned from flat scripts to a class-based hierarchy (<code>src/models.py</code>, <code>src/optimization.py</code>), ensuring code reusability and clean separation of concerns.</li>
+<li><strong>Robustness:</strong> Implemented strict Python <strong>Type Hinting</strong> and <code>dataclasses</code> for configuration, reducing runtime errors and improving developer clarity.</li>
+<li><strong>CI/CD Pipeline:</strong> Configured <strong>GitHub Actions</strong> to automate unit testing (<code>pytest</code>) and code quality checks (<code>flake8</code>), ensuring that every change maintains the "Gold Standard."</li>
+</ul>
+<hr />
+<h2>🔮 Phase 2: Hybrid Forecasting &amp; Explainable AI (XAI)</h2>
+<p>The core engine utilizes a hybrid approach to capture both short-term shocks and long-term trends:</p>
+<p><img alt="LSTM Forecasting" src="C:/Users/tekam/.gemini/antigravity/brain/c4692355-0c0d-4c50-98a4-fb3ab3e9e849/screenshots/LSTM.png" />
+<em>Figure 2: LSTM-based predictive model forecasting future price movements for TSLA.</em></p>
+<h3>🛡️ Building Trust with SHAP</h3>
+<p>In finance, "Why" is as important as "What." Using <strong>SHAP (SHapley Additive exPlanations)</strong>, we move beyond the "Black Box." Our dashboard provides stakeholders with:</p>
+<p><img alt="SHAP Explainability" src="C:/Users/tekam/.gemini/antigravity/brain/c4692355-0c0d-4c50-98a4-fb3ab3e9e849/screenshots/SHAP.png" />
+<em>Figure 3: SHAP values visualizing feature importance and temporal impact on the model.</em></p>
+<ul>
+<li><strong>Temporal Importance:</strong> Visualizing which specific historical lags (days ago) most heavily influenced the current prediction.</li>
+<li><strong>Feature Impact:</strong> Quantifying the driver behind every price movement.</li>
+</ul>
+<hr />
+<h2>⚖️ Phase 3: Modern Portfolio Theory (MPT) In Action</h2>
+<p>Forecasting alone is not enough. The final piece of the puzzle is <strong>Optimization</strong>. Using the <strong>Efficient Frontier</strong>, the system calculates the optimal weights for a portfolio of TSLA, BND, and SPY.</p>
+<p><img alt="Portfolio Optimization" src="C:/Users/tekam/.gemini/antigravity/brain/c4692355-0c0d-4c50-98a4-fb3ab3e9e849/screenshots/Optimal-Weights-Pie-Chart.png" />
+<em>Figure 4: Portfolio allocation recommendation based on the Max Sharpe Ratio optimized weights.</em></p>
+<ul>
+<li><strong>Objective:</strong> Maximize the <strong>Sharpe Ratio</strong> (Risk-Adjusted Return).</li>
+<li><strong>Result:</strong> A dynamic allocation strategy that adaptively shifts between high-growth (TSLA) and stability (BND) based on market conditions, significantly outperforming static benchmarks in backtesting.</li>
+</ul>
+<hr />
+<h2>📊 Dashboard: The Tangible Tool</h2>
+<p>The project culminates in a <strong>Streamlit Interactive Dashboard</strong> that allows stakeholders to:
+- Deep dive into historical asset performance.
+- Train and compare models on-the-fly.
+- Simulate optimal capital allocation with a single click.</p>
+<hr />
+<h2>🚀 Conclusion &amp; Future Outlook</h2>
+<p>This transformation demonstrates that "Production Grade" is a mindset of reliability, transparency, and business value. Future iterations will focus on real-time data streaming and Reinforcement Learning (RL) for automated trade execution.</p>
+<hr />
+<h3>👤 Author</h3>
+<p><strong>Tekalegn Mekonen</strong>
+<em>KAIM 8 - Week 12 Capstone</em>
+<a href="https://github.com/tekamek123/gmf-portfolio-optimization">GitHub Repository</a></p>
+        <div class="footer">
+            © 2026 Tekalegn Mekonen | KAIM 8 - Week 12 Capstone Project
+        </div>
+    </body>
+    </html>
+    
